@@ -217,7 +217,7 @@ root@ubuntu-xenial:/home/vagrant/bitcoin-docker# curl -d '{"jsonrpc":"2.0","id":
   "id": "1"
 }
 
-# node2, here it fails because that transaction isn't in the index. Setting txindex=1 in bitcoin.conf _would_ give a result here.
+# node2, here it fails because that transaction is not in the wallet.
 root@ubuntu-xenial:/home/vagrant/bitcoin-docker# curl -d '{"jsonrpc":"2.0","id":"1","method":"gettransaction","params":["008f138f10e80aaae2a5211bf2891ad522a1dd7b85d3f26cbbdabfa63c60ced0"]}' -u bitcoin:bitcoin -s localhost:18402 | jq .
 {
   "result": null,
@@ -228,6 +228,9 @@ root@ubuntu-xenial:/home/vagrant/bitcoin-docker# curl -d '{"jsonrpc":"2.0","id":
   "id": "1"
 }
 
+# however, using `getrawtransaction` on node2 does actually return it
+root@ubuntu-xenial:/home/vagrant/bitcoin-docker# curl -d '{"jsonrpc":"2.0","id":"1","method":"getrawtransaction","params":["0c0bd722bc5534ec715e31c70e913e887dcdf6cf15438ed890c1a5b56a631d65", true]}' -u bitcoin:bitcoin -s localhost:18402
+{"result":{"txid":"0c0bd722bc5534ec715e31c70e913e887dcdf6cf15438ed890c1a5b56a631d65","hash":"0c0bd722bc5534ec715e31c70e913e887dcdf6cf15438ed890c1a5b56a631d65","version":2,"size":188,"vsize":188,"locktime":101,"vin":[{"txid":"75aa43e3c1f2e4094190339b1d7aa605e06cd5a6fe68db1fcc23ff2f1b54d57d","vout":0,"scriptSig":{"asm":"304502210093f7c7b47eff76fc0e4926bb10942bfb90c8d9f5dc430dd0cb0a191908191cb10220522bcc869bd8fa44e5f8d865c8988da53ae875a05ae3fa3cabe2cf5fe1aa0310[ALL]","hex":"48304502210093f7c7b47eff76fc0e4926bb10942bfb90c8d9f5dc430dd0cb0a191908191cb10220522bcc869bd8fa44e5f8d865c8988da53ae875a05ae3fa3cabe2cf5fe1aa031001"},"sequence":4294967294}],"vout":[{"value":3.14000000,"n":0,"scriptPubKey":{"asm":"OP_HASH160 d5044b6ca6c83a0d0f182dc1f939285d7650bae4 OP_EQUAL","hex":"a914d5044b6ca6c83a0d0f182dc1f939285d7650bae487","reqSigs":1,"type":"scripthash","addresses":["2NCfZ4YFssjjGp5xQjnDMKLFRy8XP4W4TYo"]}},{"value":46.85996240,"n":1,"scriptPubKey":{"asm":"OP_HASH160 b11e110167018be58797913289c0747e1b916879 OP_EQUAL","hex":"a914b11e110167018be58797913289c0747e1b91687987","reqSigs":1,"type":"scripthash","addresses":["2N9PjcHmezjNzi4KAuj1ajKVACYmM7CWw3m"]}}],"hex":"02000000017dd5541b2fff23cc1fdb68fea6d56ce005a67a1d9b33904109e4f2c1e343aa75000000004948304502210093f7c7b47eff76fc0e4926bb10942bfb90c8d9f5dc430dd0cb0a191908191cb10220522bcc869bd8fa44e5f8d865c8988da53ae875a05ae3fa3cabe2cf5fe1aa031001feffffff028042b7120000000017a914d5044b6ca6c83a0d0f182dc1f939285d7650bae487d0a04e170100000017a914b11e110167018be58797913289c0747e1b9168798765000000","blockhash":"1d5df158d1aecf18b893a0f5cd91fe782a0f8b53b028fff3b5892ff9beaf7134","confirmations":101,"time":1523422840,"blocktime":1523422840},"error":null,"id":"1"}
 ```
 
 
