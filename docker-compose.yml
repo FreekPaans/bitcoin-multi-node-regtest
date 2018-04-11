@@ -5,16 +5,22 @@ services:
     ports:
       - "18400:18443"
       - "18500:18444"
-    command: ["/bitcoin-0.16.0/bin/bitcoind", "-regtest",  "-printtoconsole", "-addnode=node1:18444", "-addnode=node2:18444"]
+    expose: 
+      - "18444"
+    command: [ "-addnode=node1:18444", "-addnode=node2:18444"]
   node1:
     build: .
     ports:
       - "18401:18443"
       - "18501:18444"
-    command: ["/bitcoin-0.16.0/bin/bitcoind", "-regtest",  "-printtoconsole", "-addnode=miner1:18444", "-addnode=node2:18444"]
+    expose: 
+      - "18444"
+    command: [ "-addnode=miner:18444", "-addnode=node2:18444"]
   node2:
     build: .
     ports:
       - "18402:18443"
       - "18502:18444"
-    command: ["/bitcoin-0.16.0/bin/bitcoind", "-regtest",  "-printtoconsole", "-addnode=node1:18444", "-addnode=miner1:18444"]
+    expose: 
+      - "18444"
+    command: [ "-addnode=node1:18444", "-addnode=miner:18444"]
